@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-# vim: set fileencoding=utf8 :
+# vim: set fileencoding=utf8 :
+
+'''
+Packtpub's daily day name
+
+Created on 02/20/2018
+
+@author LluisMas
+'''
 
 import urllib2
 import bs4
@@ -14,24 +23,28 @@ class Client(object):
 
     def parser(self, html ):
         soup = bs4.BeautifulSoup(html, "lxml")
-        activitats = soup.find_all("div", "dotd-title")
+        title = soup.find("div", "dotd-title")
 
-        for activitat in activitats:
-            titol_html = activitat.find("span", "flink-title")
-            titol = titol_html.text
-            link_html = activitat.find("a")
-            link = link_html["href"]
+        if title == None: return
 
-            print titol, "--", link
+        title_header = title.find("h2")
 
-        return activitats
+        if title_header == None: return
+        if title_header.text == None: return
+
+        return title_header.text
+
 
     def run(self):
         url = "https://www.packtpub.com/packt/offers/free-learning?from=block"
         html = self.get_web(url)
-        activitats = self.parser(html)
 
-        #exec
+        book = self.parser(html)
+
+        if book == None: return
+
+        print book.strip()
+
 
 if __name__ == "__main__":
     client = Client()
