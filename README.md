@@ -1,11 +1,10 @@
 # _PW_
 
-This project is to get information about Packtub's Daily Book.
+This project is a simply web client to get information about Packtub's Daily Book.
 
 
 ### Prerequisites
 ```
-packtub.py
-  web client
+packTub.py
   urllib2, beautifulsoup4
 ```
