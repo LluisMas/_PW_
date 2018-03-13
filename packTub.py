@@ -32,20 +32,25 @@ class Client(object):
         return html
     """
     @param html: html where we want to find the information.
-    @return: Header that contains the title of the Book.
+    @return: tuple  that contains the title of the Book and description.
     """
     def parser(self, html ):
         soup = bs4.BeautifulSoup(html, "lxml")
         title = soup.find("div", "dotd-title")
 
-        if title == None: return "No Book today"
 
+        if title == None: return None
         title_header = title.find("h2")
+        if title_header == None: return None
+        if title_header.text == None: return None
 
-        if title_header == None: return "No Book today"
-        if title_header.text == None: return "No Book today"
 
-        return title_header.text
+        description = soup.find("div", "dotd-main-book-summary float-left")
+        if description == None: return None
+        description = description.find("div", "")
+        if description == None: return None
+
+        return (title_header.text, description.text)
 
     """
     @return: Title of the daily book.
@@ -56,12 +61,17 @@ class Client(object):
 
         book = self.parser(html)
 
-        if book == None: return
+        if book == None: return None
 
-        return book.strip()
+        return (book[0].strip(), book[1].strip())
 
 
 if __name__ == "__main__":
     client = Client()
     result = client.run()
-    if result: print result
+    if result:
+         print "Book of the day: " ,result[0]
+         print ""
+         print result[1]
+    else:
+        print "No book today"
